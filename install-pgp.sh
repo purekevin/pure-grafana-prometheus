@@ -149,9 +149,6 @@ WantedBy=multi-user.target
 printf "${GREEN}Starting up Prometheus......${NC}\n"
 systemctl daemon-reload
 systemctl enable --now prometheus
-#DEBUG systemctl start prometheus
-#DEBUG sleep 5
-#DEBUG systemctl status prometheus.service | grep "Active:"
 
 
 echo "[Unit]
@@ -174,15 +171,6 @@ sleep 5
 systemctl status node_exporter.service | grep "Active:"
 
 
-#DEBUG echo "
-#DEBUG   - job_name: 'node_exporter'
-#DEBUG     static_configs:
-#DEBUG     - targets: ['localhost:9100']
-#DEBUG " >> /etc/prometheus/prometheus.yml 
-
-#DEBUG systemctl restart prometheus
-#DEBUG sleep 5
-#DEBUG systemctl status prometheus | grep "Active:"
 
 echo
 printf "${GREEN}-----------------  Installing grafana ------------------------${NC}\n"
@@ -201,12 +189,6 @@ yum -y -q install grafana
 
 /bin/systemctl daemon-reload
 /bin/systemctl enable grafana-server.service
-
-#DEBUG wget --no-check-certificate -q https://10.21.224.167/pureuser/rft-prometheus-dashboard/-/raw/master/grafana.db
-#DEBUG chown grafana:grafana grafana.db
-#DEBUG mv /var/lib/grafana/grafana.db /var/lib/grafana/grafana.db.orig 2>/dev/null >/dev/null
-#DEBUG mv grafana.db /var/lib/grafana
-#DEBUG /bin/systemctl start grafana-server.service
 
 echo
 echo
@@ -239,7 +221,6 @@ rm -r prometheus-flashblade-exporter-master
 chown prometheus:prometheus /usr/local/bin/prometheus-flashblade-exporter
 chmod 755 /usr/local/bin/prometheus-flashblade-exporter
 
-#DEBUG wget --no-check-certificate -q https://10.21.224.167/pureuser/rft-prometheus-dashboard/-/raw/master/start-fb-exporter.sh
 wget -q --no-check-certificate https://raw.githubusercontent.com/purekevin/pure-grafana-prometheus/master/start-fb-exporter.sh
 mkdir /var/lib/prometheus/flashblade-exporter
 mv start-fb-exporter.sh /var/lib/prometheus/flashblade-exporter
@@ -263,18 +244,6 @@ WantedBy=default.target
 systemctl daemon-reload
 systemctl enable --now flashblade-exporter
 systemctl start flashblade-exporter
-#DEBUG sleep 5
-#DEBUG systemctl status flashblade-exporter | grep "Active:"
-
-#DEBUG echo "
-  #DEBUG - job_name: 'fb_exporter'
-    #DEBUG static_configs:
-    #DEBUG - targets: ['localhost:9130']
-#DEBUG " >> /etc/prometheus/prometheus.yml 
-#DEBUG printf "${GREEN}Restarting Prometheus after updating the /etc/prometheus/prometheus.yml file...${NC}\n"
-#DEBUG systemctl restart prometheus
-#DEBUG sleep 5
-#DEBUG systemctl status prometheus | grep "Active"
 
 printf "${GREEN}-----------------  Beginning install of pure_exporter ------------------------${NC}\n"
 wget -q https://github.com/PureStorage-OpenConnect/pure-exporter/archive/master.zip
@@ -324,7 +293,6 @@ systemctl start pure-exporter
 sleep 5
 systemctl status pure-exporter | grep "Active:"
 
-#DEBUG wget -q --no-check-certificate https://10.21.224.167/pureuser/rft-prometheus-dashboard/-/raw/master/prometheus-all.yml
 wget -q --no-check-certificate https://raw.githubusercontent.com/purekevin/pure-grafana-prometheus/master/prometheus-all.yml
 mv /etc/prometheus/prometheus.yml /etc/prometheus/prometheus.old.yml
 mv prometheus-all.yml /etc/prometheus/prometheus.yml
@@ -334,7 +302,6 @@ systemctl restart prometheus
 sleep 5
 systemctl status prometheus | grep "Active"
 
-#DEBUG wget --no-check-certificate -q https://10.21.224.167/pureuser/rft-prometheus-dashboard/-/raw/master/grafana-all.db
 wget --no-check-certificate -q https://github.com/purekevin/pure-grafana-prometheus/raw/master/grafana-all.db
 chown grafana:grafana grafana-all.db
 mv /var/lib/grafana/grafana.db /var/lib/grafana/grafana.db.orig 2>/dev/null >/dev/null
@@ -342,43 +309,9 @@ mv grafana-all.db /var/lib/grafana/grafana.db
 /bin/systemctl start grafana-server.service
 
 
-#DEBUG printf "${GREEN}-----------------  Beginning install of rapidfile toolkit ------------------------${NC}\n"
-#DEBUG wget --no-check-certificate -q https://10.21.224.167/pureuser/rapidfiletoolkit/-/raw/master/rapidfile-1.0.0-beta.5.tar
-#DEBUG tar xf rapidfile-1.0.0-beta.5.tar
-#DEBUG rm rapidfile-1.0.0-beta.5.tar
-#DEBUG rpm -U rapidfile-1.0.0-beta.5/rapidfile-1.0.0-beta.5-Linux.rpm
 
 printf "${GREEN}-----------------  Beginning install nfs utils ------------------------${NC}\n"
 yum -y -q install nfs-utils
-
-#DEBUG mkdir /mnt1 /mnt2
-#DEBUG echo "${NFS_VIP}:/da-dashboard-1   /mnt1     nfs    rw,sync,hard,intr 0 0" >>/etc/fstab
-#DEBUG echo "${NFS_VIP}:/da-dashboard-2   /mnt2     nfs    rw,sync,hard,intr 0 0" >>/etc/fstab
-#DEBUG mount /mnt1
-#DEBUG mount /mnt2
-#DEBUG echo
-#DEBUG echo
-#DEBUG printf "${GREEN}-----------------  Installing crontab ------------------------${NC}\n"
-#DEBUG wget --no-check-certificate -q  https://10.21.224.167/pureuser/rft-prometheus-dashboard/-/raw/master/crontab
-#DEBUG wget --no-check-certificate -q  https://10.21.224.167/pureuser/rft-prometheus-dashboard/-/raw/master/rft.sh
-
-
-#DEBUG chmod 755 rft.sh
-#DEBUG mv rft.sh /var/lib/prometheus/logcollect/
-#DEBUG crontab -l >crontab.tmp
-#DEBUG cat crontab >>crontab.tmp
-#DEBUG crontab crontab.tmp
-#DEBUG crontab -l
-#DEBUG echo
-#DEBUG echo
-#DEBUG printf "${GREEN}-----------------  Downloading additional tools ------------------------${NC}\n"
-#DEBUG wget --no-check-certificate -q https://10.21.224.167/pureuser/rft-prometheus-dashboard/-/raw/master/mk-empty-files.sh
-#DEBUG wget --no-check-certificate -q https://10.21.224.167/pureuser/rft-prometheus-dashboard/-/raw/master/mk-data-files.sh
-
-
-#DEBUG chmod 755 mk-empty-files.sh mk-data-files.sh
-#DEBUG echo
-#DEBUG echo
 
 systemctl restart grafana-server
 
