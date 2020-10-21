@@ -39,7 +39,7 @@ scrape_configs:
   static_configs:
   - targets: [ 10.21.225.35 ]
     labels:
-      __pure_apitoken: T-5b32645c-e51a-48bd-85cf-3004fe1bc0a1
+      __pure_apitoken: T-00000000-0000-0000-0000-000000000000
 
 
 #
@@ -65,5 +65,5 @@ scrape_configs:
   static_configs:
   - targets: [ 10.21.225.35 ]
     labels:
-      __pure_apitoken: T-5b32645c-e51a-48bd-85cf-3004fe1bc0a1
+      __pure_apitoken: T-00000000-0000-0000-0000-000000000000
 
